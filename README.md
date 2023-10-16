@@ -1,5 +1,5 @@
 # Q-Arm
- - Co-Created a python program that simulates a robotic arm, which moves respective autoclaves into their respective sterilizer using Quanser simulation. The movement of the Q-Arm(robotic arm) is controlled by two potentiometers seen in the image above.
+ - Co-developed a Python program that orchestrates the precise positioning of autoclaves to place in their designated sterilizers using the Quanser simulation environment. The movement and coordination of the Q-Arm robotic system are facilitated through the utilization of two potentiometers, as illustrated in the accompanying image.
  
 ![image](https://github.com/JadenAntM/Q-Arm/assets/144370058/23bb856c-a352-4efc-95e1-4430c3128835)
 ![image](https://github.com/JadenAntM/Q-Arm/assets/144370058/26af8df6-035d-41b2-b786-ff90ece5e793)

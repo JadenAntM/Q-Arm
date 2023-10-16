@@ -28,20 +28,12 @@ def rotate_arm_base(container_id, before):
                 degree = 175
             elif (degree < -175):
                 degree = -175
-            #calculates how much it needs to change rotate by subtracting the current value from the desired value
-            #(ex. to go to 0 from 100 you would do 0-100 = -100 degrees)
             change_deg = degree - current_deg
-            #current degree is just the change + the previous degree
-            #(ex. current = 100, change = -100, new = 0 deg)
             current_deg = current_deg + change_deg
             arm.rotate_base(change_deg)
-            #sets the new "before" variable
             before = potentiometer.right()
-            #sets the new before left variable, which is used to reset the arm
             before_left = potentiometer.left()
-        #this is in case the potentiometer GUI lags. Which it does. Quite often.
-        #Used when you need to reset the position because it has desynced to the actual angle
-        elif(potentiometer.left() == 0 and potentiometer.left() != before_left):
+        elif(potentiometer.left() == 0 and potentiometer.left() != before_left):  #Error handling
             #sends arm to home and sets the current degree to be 0
             arm.move_arm(0.406,0,0.483)
             current_deg = 0
@@ -49,6 +41,7 @@ def rotate_arm_base(container_id, before):
             before_left = potentiometer.left()
         correct_autoclave = arm.check_autoclave(container_colour)
     return potentiometer.right()
+
 
 def drop_off(container_id):
     #Activates all autoclaves
@@ -105,26 +98,30 @@ def pick_up(pos):
     #moves arm back to home
     arm.move_arm(0.406,0,0.483)
     time.sleep(1)
-def randomize_spawn(cages):
-    #chooses a random box and records its number
-    cage_num = cages[random.randint(0,len(cages)-1)]
+
+
+def randomize_spawn(cages):  #Uses mapping for the cage perameters
+    if not cages:
+        return cages, ["", ""]
+
+    cage_num = random.choice(cages)
     cages.remove(cage_num)
-    #spawns in the cage to be picked up
     arm.spawn_cage(cage_num)
-    #creates cage id given the number of the cage spawned
-    if (cage_num == 1):
-        cage_id = ["red", "small"]
-    elif(cage_num == 2):
-        cage_id = ["green", "small"]
-    elif(cage_num == 3):
-        cage_id = ["blue", "small"]
-    elif(cage_num == 4):
-        cage_id = ["red", "large"]
-    elif(cage_num == 5):
-        cage_id = ["green", "large"]
-    elif(cage_num == 6):
-        cage_id = ["blue", "large"]
+
+    cage_id_mapping = {
+        1: ["red", "small"],
+        2: ["green", "small"],
+        3: ["blue", "small"],
+        4: ["red", "large"],
+        5: ["green", "large"],
+        6: ["blue", "large"]
+    }
+
+    cage_id = cage_id_mapping.get(cage_num, ["", ""])
+    
     return cages, cage_id
+
+
 def main():
     pos1 = [0.531, 0.056, 0.044]
     cage_nums = [1,2,3,4,5,6]

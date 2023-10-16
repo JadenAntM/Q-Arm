@@ -37,24 +37,18 @@ def rotate_arm_base(container_id, before):
             #sends arm to home and sets the current degree to be 0
             arm.move_arm(0.406,0,0.483)
             current_deg = 0
-            #so it doesn't reset continuously
             before_left = potentiometer.left()
         correct_autoclave = arm.check_autoclave(container_colour)
     return potentiometer.right()
 
 
 def drop_off(container_id):
-    #Activates all autoclaves
     arm.activate_autoclaves()
-    #Sets the container colour as the first index of the parameter of the function which is a list of form ["colour", "size"]
     container_colour = container_id[0]
-    #Sets the container size as the second index of the parameter of the function which is a list of form ["colour", "size"]
     container_size = container_id[1]
     #Defines a control variable called dropped_off as False
     dropped_off = False
-    #A while loop that runs the nested code while the control variable is still False
     while (dropped_off == False):
-        #An if conditional that runs the nested code if the potentiometer value is between 0.5 and 1.0 AND if the container_size is small
         if 0.5 < potentiometer.left() < 1.0 and container_size == "small":
             #Various motion commands for the arm that brings the held container to the top of the autoclave, drops it inside, and returns the arm home
             arm.rotate_elbow(-15)
@@ -68,9 +62,7 @@ def drop_off(container_id):
             dropped_off = True
         #An elif conditional that runs the nested code if the potentiometer value is 1.0 AND the container size is large
         elif potentiometer.left() == 1.0 and container_size == "large":
-            #Various motion commands for the arm that opens autoclave, places the container inside, returns the arm home, and closes the autoclave
             time.sleep(1)
-            #Operation that opens the autoclave which is the same colour as the held container
             arm.open_autoclave(container_colour)
             time.sleep(1)
             arm.rotate_elbow(30)
@@ -80,27 +72,27 @@ def drop_off(container_id):
             arm.control_gripper(-45)
             time.sleep(1)
             arm.home()
-            #Operation that closes the autoclave which is the same colour as the held container
             arm.open_autoclave(container_colour, False)
             #Sets the control variable to True, terminating the while loop
             dropped_off = True
-    #Deactivates all autoclaves
     arm.deactivate_autoclaves()
         
 #this function will pick up an object given its position [x,y,z]
 def pick_up(pos):
-    #moves arm to provided position
+
     arm.move_arm(pos[0],pos[1],pos[2])
     time.sleep(1)
-    #grasps item
+
+    
     arm.control_gripper(45)
     time.sleep(1)
-    #moves arm back to home
+
+    
     arm.move_arm(0.406,0,0.483)
     time.sleep(1)
 
 
-def randomize_spawn(cages):  #Uses mapping for the cage perameters
+def randomize_spawn(cages):  #Software does spawn random cages manually, made func to add random spawns
     if not cages:
         return cages, ["", ""]
 
@@ -135,9 +127,6 @@ def main():
         before = rotate_arm_base(cage_id, before)
         drop_off(cage_id)
 main()
-#---------------------------------------------------------------------------------
-# STUDENT CODE ENDS
-#---------------------------------------------------------------------------------
     
 
     
